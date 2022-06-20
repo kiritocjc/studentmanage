@@ -1,0 +1,204 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.studentmangage.mapper.UserMapper">
+	
+	<select id="selectAdminByAdmin" resultType="Admin" parameterType="Admin">
+		select * from s_admin where name=#{name} and password=#{password}
+	</select>
+	
+	<select id="selectStudentByStudent" resultType="Student" parameterType="Student">
+		select * from s_student where name=#{name} and password=#{password}
+	</select>
+	
+	<select id="selectTeacherByTeacher" resultType="Teacher" parameterType="Teacher">
+		select * from s_teacher where name=#{name} and password=#{password}
+	</select>
+	
+	<select id="selectAllTeacher" parameterType="Page" resultType="Teacherinfo" >
+		select * from teacherinfo limit #{page},#{limit};
+	</select>
+	
+	<select id="selectAllStudent" parameterType="Page" resultType="Studentinfo" >
+		select * from studentinfo limit #{page},#{limit};
+	</select>
+	
+	<select id="CheckStudentname" parameterType="String"  resultType="String" >
+		SELECT name from s_student
+		<where>
+			name=#{name}
+		</where>
+	</select>
+	
+	<select id="CheckTeachername"  parameterType="String" resultType="String" >
+		SELECT name from s_teacher
+		<where>
+			name=#{name}
+		</where>
+	</select>
+	
+	<select id="selectTeachercoun" resultType="Integer" >
+		SELECT count(*) from Teacherinfo;
+	</select>
+	
+	<select id="selectStduentcoun"  resultType="Integer" >
+		SELECT count(*) from Studentinfo;
+	</select>
+	
+	<update id="UpdateTeacherinfo" parameterType="Teacherinfo">
+		update teacherinfo set 
+			tname=#{tname},
+			tage=#{tage},
+			tsex=#{tsex},
+			tdept=#{tdept},
+			tel=#{tel},
+			qq=#{qq},
+		professional=#{professional}
+		<where>
+			teacherId=#{teacherId}
+		</where>
+		
+	</update>
+	
+	
+	
+	<delete id="delTeacherinfo" parameterType="String">
+		delete from teacherinfo 
+		<where>
+		teacherId=#{teacherId}
+		</where>
+	</delete>
+	
+	<update id="UpdateStudentinfo" parameterType="Studentinfo">
+		update Studentinfo set 
+			name=#{name},
+			sex=#{sex},
+			age=#{age},
+			teacherId=#{teacherId},
+			grade=#{grade},
+			clazz=#{clazz},
+		titleid=#{titleid}
+		<where>
+			studentId=#{studentId}
+		</where>
+		
+	</update>
+	<delete id="delStudentinfo" parameterType="String">
+		delete from Studentinfo 
+		<where>
+		studentId=#{studentId}
+		</where>
+	</delete>
+	
+	<insert id="registerstudent" parameterType="Object">
+		insert into s_student values(null,#{username},#{password},#{studentId});
+	</insert>
+	
+	<insert id="registerstudentinfo" parameterType="Object">
+		INSERT into studentinfo(studentId,name) value(#{studentId},#{name});
+	</insert>
+	
+	<insert id="registerteracher" parameterType="Object">
+		insert into s_teacher values(null,#{username},#{password},
+		#{teacherId});
+	</insert>
+	
+	<insert id="registerteracherinfo" parameterType="Object">
+		INSERT into teacherinfo(teacherId,tname,tdept
+		,tsex,tel,professional) value(#{teacherId},#{tname},
+		#{tdept},#{tsex},#{tel},#{professional});
+	</insert>
+	
+	<select id="getTitleinfoAll" parameterType="Page" resultType="Titleinfo" >
+		select * from titleinfo limit #{page},#{limit};
+	</select>
+	
+	<select id="selectTitleinfocoun"  resultType="Integer" >
+		SELECT count(*) from titleinfo;
+	</select>
+	
+	
+	<select id="getTitleinfoAllLIKE" parameterType="Object" resultType="Titleinfo" >
+		select * from titleinfo 
+		<where>
+		name LIKE '%${seearch}%'
+		</where>
+	</select>
+	
+	<select id="selectTitleinfocounforLIKE"  parameterType="String" resultType="Integer" >
+		SELECT count(*) from titleinfo WHERE name LIKE '%${seearch}%'
+	</select>
+	
+	<insert id="addTitleinfo" parameterType="Titleinfo">
+		insert into titleinfo values(null,#{type},#{name},#{teacherId},#{src});
+	</insert>
+	
+	<select id="getStudenttitleAll"  parameterType="Page" resultType="TitleinfoStdentVo" >
+		select a.titleId,a.type,a.`name`,a.teacherId,t.tname from titleinfo as a 
+		JOIN teacherinfo AS t WHERE a.teacherId=t.teacherId limit #{page},#{limit};
+	</select>
+	
+	<select id="selectStudenttitleAllcoun"  resultType="Integer" >
+		SELECT COUNT(*) FROM (select a.titleId,a.type,a.`name`,a.teacherId,t.tname from titleinfo as a JOIN teacherinfo AS t WHERE a.teacherId=t.teacherId) a;
+	</select>
+	
+	<select id="selectstdenttitleid"  parameterType="String" resultType="Integer" >
+		SELECT titleid from Studentinfo where studentId=#{studentid};
+	</select>
+	
+	<update id="UpdateStudentinfoBystdenttitleid" parameterType="Studentinfo">
+	<!-- 
+	    update studentinfo SET titleid=#{titleid},
+			teacherId=#{teacherId},
+		where
+			studentId=#{studentId};
+	 -->		
+		update Studentinfo set 
+			teacherId=#{teacherId},
+		titleid=#{titleid}
+		<where>
+			studentId=#{studentId}
+		</where>
+	</update>
+	
+	<update id="studentdeltitle" parameterType="String">
+	<!-- 
+	    update studentinfo SET titleid=#{titleid},
+			teacherId=#{teacherId},
+		where
+			studentId=#{studentId};
+	 -->		
+		update Studentinfo set 
+			teacherId=0,
+			titleid=0
+		<where>
+			studentId=#{studentid}
+		</where>
+	</update>
+	
+	<select id="loadStdentTitleName" parameterType="String" resultType="String">
+		SELECT name FROM titleinfo where titleId=(SELECT titleId from studentinfo where studentId=#{studentid})
+	</select>
+	
+	<update id="sduentaddtitledata" parameterType="Object">
+		update Studentinfo set 
+			src=#{fileName}
+		<where>
+			studentId=#{studentid}
+		</where>
+	</update>
+	
+	<insert id="adds_student" parameterType="String" >
+		insert into s_student values(null,#{username},#{password},#{studentid});
+	</insert>
+	
+	<insert id="addStudent" parameterType="Object">
+		insert into studentinfo(studentid,name,sex,age,clazz,grade) 
+		values(#{studentid},#{name},#{tsex},#{age},#{clazz},#{grade});
+	</insert>
+	
+	<insert id="addTeacher" parameterType="Object">
+		INSERT into teacherinfo values(#{teacherId},#{tname},
+		#{tage},#{tsex},#{tdept},#{tel},#{qq},#{professional});
+	</insert>
+</mapper>        

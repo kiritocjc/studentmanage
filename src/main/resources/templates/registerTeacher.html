@@ -1,0 +1,106 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+				xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+    <head>
+        <meta charset="utf-8">
+        <title>注册页面</title>
+        <meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <link rel="stylesheet" th:href="@{layui/css/layui.css}" media="all"/>
+        <link rel="stylesheet" th:href="@{layui/css/admin.css}" media="all"/>
+        <link rel="stylesheet" th:href="@{layui/css/login.css}" media="all"/>
+        <script type="text/javascript" th:src="@{layui/layui.js}"></script>
+        <script type="text/javascript" th:src="@{js/jquery-3.2.1.min.js}"></script>
+        <!-- 该页面方法都是在指定对应的js文件 -->
+        <script type="text/javascript" th:src="@{js/registerTeacher.js}"></script>
+        
+    </head>
+    
+    <body>
+
+
+  <div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+    <div class="layadmin-user-login-main">
+      <div class="layadmin-user-login-box layadmin-user-login-header">
+        <h2>注册页面</h2>
+        <p> </p>
+      </div>
+      <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+      	 <div class="layui-form-item">
+		   <label class="layui-form-label">角色选择</label>
+		   <div class="layui-input-block">
+		     <input type="radio" name="role" id ="role" value="1" title="教师" checked="checked">
+		   </div>
+		 </div>
+      	 <div class="layui-form-item">
+          <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
+          <input type="text" name="name" id="LAY-user-login-username" lay-verify="name"
+           placeholder="帐号" class="layui-input" onblur="checkname()">
+        </div>
+        <div class="layui-form-item">
+          <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-password"></label>
+          <input type="password" name="password" id="LAY-user-login-password" lay-verify="pass" placeholder="密码" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+          <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="LAY-user-login-repass"></label>
+          <input type="password" name="repass" id="LAY-user-login-repass" lay-verify="required" placeholder="确认密码" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+          <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
+          <input type="text" name="nickname" id="LAY-user-login-tname" lay-verify="nickname" placeholder="姓名" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+          <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
+          <input type="text" name="nickname" id="LAY-user-login-tdept" lay-verify="nickname" placeholder="部门" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+		   <label class="layui-form-label">性别选择</label>
+		   <div class="layui-input-block">
+		   <input type="radio" name="tsex" id ="LAY-user-login-tsex" value="1" title="男" checked="checked">
+		     <input type="radio" name="tsex" id ="LAY-user-login-tsex" value="0" title="女" >
+		   </div>
+		 </div>
+        <div class="layui-form-item">
+          <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
+          <input type="text" name="nickname" id="LAY-user-login-teacherId" lay-verify="nickname" placeholder="教师编号" class="layui-input">
+        </div>
+         <div class="layui-form-item">
+          <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
+          <input type="text" name="nickname" id="LAY-user-login-tel" lay-verify="nickname" placeholder="手机号" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+          <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="LAY-user-login-nickname"></label>
+          <input type="text" name="nickname" id="LAY-user-login-professional" lay-verify="nickname" placeholder="职称" class="layui-input">
+        </div>
+        <div class="layui-form-item">
+          <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="LAY-user-reg-submit" onclick="register()">注 册</button>
+        </div>
+        <div class="layui-trans layui-form-item layadmin-user-login-other">
+          <label>社交账号注册</label>
+          <a href="javascript:;"><i class="layui-icon layui-icon-login-qq"></i></a>
+          <a href="javascript:;"><i class="layui-icon layui-icon-login-wechat"></i></a>
+          <a href="javascript:;"><i class="layui-icon layui-icon-login-weibo"></i></a>
+          
+          <a href="login.html" class="layadmin-user-jump-change layadmin-link layui-hide-xs">用已有帐号登入</a>
+          <a href="login.html" class="layadmin-user-jump-change layadmin-link layui-hide-sm layui-show-xs-inline-block">登入</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="layui-trans layadmin-user-login-footer">
+      
+      <p>© 2021 </p>
+
+    </div>
+
+  </div>
+
+ 
+</body>
+    <script type="text/javascript">
+ 	layui.use(['form'],function(){
+ 		 var layer = layui.layer
+         ,form = layui.form;
+ 	})
+  </script>
+ </html>
